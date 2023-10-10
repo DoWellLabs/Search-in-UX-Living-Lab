@@ -12,6 +12,7 @@ import '/flutter_flow/form_field_controller.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
+import '/flutter_flow/random_data_util.dart' as random_data;
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,9 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
     context.watch<FFAppState>();
 
     return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
+      onTap: () => _model.unfocusNode.canRequestFocus
+          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
+          : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
         resizeToAvoidBottomInset: false,
@@ -125,8 +128,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                     ) !=
                                     null) ||
                                 (getJsonField(
-                                      (_model.nearbyLocationResult?.jsonBody ??
-                                          ''),
+                                      (_model.locationsResult?.jsonBody ?? ''),
                                       r'''$.succesful_results''',
                                     ) !=
                                     null)) &&
@@ -143,7 +145,8 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                     (_model.locationsIdResult?.jsonBody ?? ''),
                                   ).toString()
                                 : GetNearbyLocationsIdCall.centerCoordinate(
-                                    (_model.placeIdsResult?.jsonBody ?? ''),
+                                    (_model.locationsIdResultCopy?.jsonBody ??
+                                        ''),
                                   ).toString(),
                             destinations: functions.joinCoords(getJsonField(
                                       (_model.locationsResult?.jsonBody ?? ''),
@@ -159,13 +162,15 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                     .toList()
                                     .map((e) => e.toString())
                                     .toList()
-                                : (GetNearbyLocationsCall.coordinates(
-                                    (_model.nearbyLocationResult?.jsonBody ??
+                                : (GetNearbyLocationsCall.locationList(
+                                    (_model.locationsResultCopy?.jsonBody ??
                                         ''),
                                   ) as List)
                                     .map<String>((s) => s.toString())
                                     .toList()!
                                     .take(25)
+                                    .toList()
+                                    .map((e) => e.toString())
                                     .toList()),
                           );
                           _model.lEmailNext25 =
@@ -180,7 +185,8 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                     (_model.locationsIdResult?.jsonBody ?? ''),
                                   ).toString()
                                 : GetNearbyLocationsIdCall.centerCoordinate(
-                                    (_model.placeIdsResult?.jsonBody ?? ''),
+                                    (_model.locationsIdResultCopy?.jsonBody ??
+                                        ''),
                                   ).toString(),
                             destinations: functions.joinCoords(functions
                                 .sublist(
@@ -200,7 +206,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                             .map<String>((s) => s.toString())
                                             .toList()!
                                         : (GetNearbyLocationsCall.coordinates(
-                                            (_model.nearbyLocationResult
+                                            (_model.locationsResultCopy
                                                     ?.jsonBody ??
                                                 ''),
                                           ) as List)
@@ -221,7 +227,8 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                     (_model.locationsIdResult?.jsonBody ?? ''),
                                   ).toString()
                                 : GetNearbyLocationsIdCall.centerCoordinate(
-                                    (_model.placeIdsResult?.jsonBody ?? ''),
+                                    (_model.locationsIdResultCopy?.jsonBody ??
+                                        ''),
                                   ).toString(),
                             destinations: functions.joinCoords(functions
                                 .sublist(
@@ -241,7 +248,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                             .map<String>((s) => s.toString())
                                             .toList()!
                                         : (GetNearbyLocationsCall.coordinates(
-                                            (_model.nearbyLocationResult
+                                            (_model.locationsResultCopy
                                                     ?.jsonBody ??
                                                 ''),
                                           ) as List)
@@ -262,8 +269,11 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                               return Material(
                                 color: Colors.transparent,
                                 child: GestureDetector(
-                                  onTap: () => FocusScope.of(context)
-                                      .requestFocus(_model.unfocusNode),
+                                  onTap: () =>
+                                      _model.unfocusNode.canRequestFocus
+                                          ? FocusScope.of(context)
+                                              .requestFocus(_model.unfocusNode)
+                                          : FocusScope.of(context).unfocus(),
                                   child: EmailWidget(
                                     locations: getJsonField(
                                               (_model.locationsResult
@@ -277,8 +287,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                 ''),
                                           )!
                                         : GetNearbyLocationsCall.locationList(
-                                            (_model.nearbyLocationResult
-                                                    ?.jsonBody ??
+                                            (_model.locationsResult?.jsonBody ??
                                                 ''),
                                           )!,
                                     query: _model.queryDropdownValue == null ||
@@ -518,80 +527,89 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
               ))
                 Container(
                   width: MediaQuery.sizeOf(context).width * 1.0,
-                  height: MediaQuery.sizeOf(context).height * 0.15,
+                  height: MediaQuery.sizeOf(context).height * 0.1,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondary,
                   ),
                   alignment: AlignmentDirectional(-1.00, 0.00),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      FlutterFlowIconButton(
-                        borderColor: FlutterFlowTheme.of(context).secondary,
-                        borderRadius: 8.0,
-                        buttonSize: 60.0,
-                        fillColor: FlutterFlowTheme.of(context).secondary,
-                        icon: Icon(
-                          Icons.menu_rounded,
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          size: 32.0,
+                  child: Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        FlutterFlowIconButton(
+                          borderColor: FlutterFlowTheme.of(context).secondary,
+                          borderRadius: 8.0,
+                          buttonSize: 60.0,
+                          fillColor: FlutterFlowTheme.of(context).secondary,
+                          icon: Icon(
+                            Icons.menu_rounded,
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                            size: 32.0,
+                          ),
+                          onPressed: () async {
+                            scaffoldKey.currentState!.openDrawer();
+                          },
                         ),
-                        onPressed: () async {
-                          scaffoldKey.currentState!.openDrawer();
-                        },
-                      ),
-                      Container(
-                        width: MediaQuery.sizeOf(context).width * 0.85,
-                        height: MediaQuery.sizeOf(context).height * 0.15,
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).secondary,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (responsiveVisibility(
-                              context: context,
-                              phone: false,
-                              tablet: false,
-                            ))
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: Image.asset(
-                                      'assets/images/Group_1.png',
-                                      height: 67.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        24.0, 0.0, 0.0, 0.0),
-                                    child: Text(
-                                      'Search in DoWell Living Lab',
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.getFont(
-                                        'Poppins',
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 40.0,
+                        Container(
+                          width: MediaQuery.sizeOf(context).width * 0.85,
+                          height: MediaQuery.sizeOf(context).height * 0.15,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context).secondary,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (responsiveVisibility(
+                                context: context,
+                                phone: false,
+                                tablet: false,
+                              ))
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Hero(
+                                      tag: 'dowell',
+                                      transitionOnUserGestures: true,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        child: Image.asset(
+                                          'assets/images/Group_1.png',
+                                          height: 67.0,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                          ],
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          24.0, 0.0, 0.0, 0.0),
+                                      child: Text(
+                                        'Search in DoWell Living Lab',
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.getFont(
+                                          'Poppins',
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 40.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ]
-                        .divide(SizedBox(width: 12.0))
-                        .addToStart(SizedBox(width: 32.0)),
+                      ]
+                          .divide(SizedBox(width: 12.0))
+                          .addToStart(SizedBox(width: 32.0)),
+                    ),
                   ),
                 ),
               if (responsiveVisibility(
@@ -599,62 +617,72 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                 tabletLandscape: false,
                 desktop: false,
               ))
-                Container(
-                  width: MediaQuery.sizeOf(context).width * 1.0,
-                  height: MediaQuery.sizeOf(context).height * 0.15,
-                  decoration: BoxDecoration(
-                    color: Color(0xFF3BB06C),
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: Image.asset(
-                        'assets/images/Vector.png',
-                      ).image,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      FlutterFlowIconButton(
-                        borderColor: FlutterFlowTheme.of(context).secondary,
-                        borderRadius: 8.0,
-                        buttonSize: 60.0,
-                        fillColor: FlutterFlowTheme.of(context).secondary,
-                        icon: Icon(
-                          Icons.menu_rounded,
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          size: 32.0,
-                        ),
-                        onPressed: () async {
-                          scaffoldKey.currentState!.openDrawer();
-                        },
+                Align(
+                  alignment: AlignmentDirectional(0.00, 0.00),
+                  child: Container(
+                    width: MediaQuery.sizeOf(context).width * 1.0,
+                    height: MediaQuery.sizeOf(context).height * 0.14,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF3BB06C),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: Image.asset(
+                          'assets/images/Vector.png',
+                        ).image,
                       ),
-                      Column(
+                    ),
+                    child: Align(
+                      alignment: AlignmentDirectional(0.00, 0.00),
+                      child: Row(
                         mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.asset(
-                              'assets/images/Group_1.png',
-                              width: 60.0,
-                              height: 44.8,
-                              fit: BoxFit.cover,
+                          FlutterFlowIconButton(
+                            borderColor: FlutterFlowTheme.of(context).secondary,
+                            borderRadius: 8.0,
+                            buttonSize: 60.0,
+                            fillColor: FlutterFlowTheme.of(context).secondary,
+                            icon: Icon(
+                              Icons.menu_rounded,
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              size: 32.0,
                             ),
+                            onPressed: () async {
+                              scaffoldKey.currentState!.openDrawer();
+                            },
                           ),
-                          Text(
-                            'Search in UX Living Lab',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.getFont(
-                              'Poppins',
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20.0,
-                            ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Hero(
+                                tag: 'dowell',
+                                transitionOnUserGestures: true,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image.asset(
+                                    'assets/images/Group_1.png',
+                                    width: 60.0,
+                                    height: 44.8,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                'Search in UX Living Lab',
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.getFont(
+                                  'Poppins',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               Align(
@@ -724,11 +752,9 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                         ),
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            6.0, 0.0, 6.0, 24.0),
+                                            6.0, 0.0, 6.0, 0.0),
                                         child: Container(
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
-                                                  0.96,
+                                          width: double.infinity,
                                           height: MediaQuery.sizeOf(context)
                                                   .height *
                                               0.2,
@@ -755,193 +781,216 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                Stack(
-                                                  children: [
-                                                    if (_model.sLocationDropdownValue ==
-                                                            null ||
-                                                        _model.sLocationDropdownValue ==
-                                                            '')
-                                                      Align(
-                                                        alignment:
-                                                            AlignmentDirectional(
-                                                                0.00, 0.00),
-                                                        child:
-                                                            FlutterFlowIconButton(
-                                                          borderColor:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .secondary,
-                                                          borderRadius: 30.0,
-                                                          borderWidth: 0.0,
-                                                          buttonSize: 60.0,
-                                                          fillColor: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryBackground,
-                                                          icon: Icon(
-                                                            Icons.play_arrow,
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .secondary,
-                                                            size: 30.0,
+                                                Expanded(
+                                                  child: Stack(
+                                                    children: [
+                                                      if (_model.sLocationDropdownValue !=
+                                                              null &&
+                                                          _model.sLocationDropdownValue !=
+                                                              '')
+                                                        FutureBuilder<
+                                                            ApiCallResponse>(
+                                                          future:
+                                                              GetCoordinatesCall
+                                                                  .call(
+                                                            location: _model
+                                                                .sLocationDropdownValue,
                                                           ),
-                                                          showLoadingIndicator:
-                                                              true,
-                                                          onPressed: () async {
-                                                            await actions
-                                                                .launchURLInWebView(
-                                                              context,
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .secondaryBackground,
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .primary,
-                                                            );
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            // Customize what your widget looks like when it's loading.
+                                                            if (!snapshot
+                                                                .hasData) {
+                                                              return Center(
+                                                                child: SizedBox(
+                                                                  width: 50.0,
+                                                                  height: 50.0,
+                                                                  child:
+                                                                      CircularProgressIndicator(
+                                                                    valueColor:
+                                                                        AlwaysStoppedAnimation<
+                                                                            Color>(
+                                                                      FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .primary,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            }
+                                                            final googleMapGetCoordinatesResponse =
+                                                                snapshot.data!;
+                                                            return Builder(
+                                                                builder:
+                                                                    (context) {
+                                                              final _googleMapMarker =
+                                                                  FFAppState()
+                                                                      .location;
+                                                              return FlutterFlowGoogleMap(
+                                                                controller: _model
+                                                                    .googleMapsController1,
+                                                                onCameraIdle: (latLng) =>
+                                                                    setState(() =>
+                                                                        _model.googleMapsCenter1 =
+                                                                            latLng),
+                                                                initialLocation: _model
+                                                                        .googleMapsCenter1 ??=
+                                                                    functions.getLatLng(
+                                                                        functions.formatLng(GetCoordinatesCall.lat(
+                                                                          googleMapGetCoordinatesResponse
+                                                                              .jsonBody,
+                                                                        ).toString()),
+                                                                        functions.formatLng(GetCoordinatesCall.lng(
+                                                                          googleMapGetCoordinatesResponse
+                                                                              .jsonBody,
+                                                                        ).toString())),
+                                                                markers: [
+                                                                  if (_googleMapMarker !=
+                                                                      null)
+                                                                    FlutterFlowMarker(
+                                                                      _googleMapMarker
+                                                                          .serialize(),
+                                                                      _googleMapMarker,
+                                                                    ),
+                                                                ],
+                                                                markerColor:
+                                                                    GoogleMarkerColor
+                                                                        .green,
+                                                                mapType: MapType
+                                                                    .normal,
+                                                                style:
+                                                                    GoogleMapStyle
+                                                                        .standard,
+                                                                initialZoom:
+                                                                    14.0,
+                                                                allowInteraction:
+                                                                    true,
+                                                                allowZoom: true,
+                                                                showZoomControls:
+                                                                    true,
+                                                                showLocation:
+                                                                    false,
+                                                                showCompass:
+                                                                    false,
+                                                                showMapToolbar:
+                                                                    false,
+                                                                showTraffic:
+                                                                    false,
+                                                                centerMapOnMarkerTap:
+                                                                    true,
+                                                              );
+                                                            });
                                                           },
                                                         ),
-                                                      ),
-                                                    if (_model.sLocationDropdownValue !=
-                                                            null &&
-                                                        _model.sLocationDropdownValue !=
-                                                            '')
-                                                      FutureBuilder<
-                                                          ApiCallResponse>(
-                                                        future:
-                                                            GetCoordinatesCall
-                                                                .call(
-                                                          location: _model
-                                                              .sLocationDropdownValue,
-                                                        ),
-                                                        builder: (context,
-                                                            snapshot) {
-                                                          // Customize what your widget looks like when it's loading.
-                                                          if (!snapshot
-                                                              .hasData) {
-                                                            return Center(
-                                                              child: SizedBox(
-                                                                width: 50.0,
-                                                                height: 50.0,
-                                                                child:
-                                                                    CircularProgressIndicator(
-                                                                  valueColor:
-                                                                      AlwaysStoppedAnimation<
-                                                                          Color>(
-                                                                    FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .primary,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            );
-                                                          }
-                                                          final googleMapGetCoordinatesResponse =
-                                                              snapshot.data!;
-                                                          return Builder(
-                                                              builder:
-                                                                  (context) {
-                                                            final _googleMapMarker =
-                                                                FFAppState()
-                                                                    .location;
-                                                            return FlutterFlowGoogleMap(
-                                                              controller: _model
-                                                                  .googleMapsController1,
-                                                              onCameraIdle: (latLng) =>
-                                                                  setState(() =>
-                                                                      _model.googleMapsCenter1 =
-                                                                          latLng),
-                                                              initialLocation: _model
-                                                                      .googleMapsCenter1 ??=
-                                                                  functions.getLatLng(
-                                                                      functions.formatLng(GetCoordinatesCall.lat(
-                                                                        googleMapGetCoordinatesResponse
-                                                                            .jsonBody,
-                                                                      ).toString()),
-                                                                      functions.formatLng(GetCoordinatesCall.lng(
-                                                                        googleMapGetCoordinatesResponse
-                                                                            .jsonBody,
-                                                                      ).toString())),
-                                                              markers: [
-                                                                if (_googleMapMarker !=
-                                                                    null)
-                                                                  FlutterFlowMarker(
-                                                                    _googleMapMarker
-                                                                        .serialize(),
-                                                                    _googleMapMarker,
-                                                                  ),
-                                                              ],
-                                                              markerColor:
-                                                                  GoogleMarkerColor
-                                                                      .green,
-                                                              mapType: MapType
-                                                                  .normal,
-                                                              style:
-                                                                  GoogleMapStyle
-                                                                      .standard,
-                                                              initialZoom: 14.0,
-                                                              allowInteraction:
-                                                                  true,
-                                                              allowZoom: true,
-                                                              showZoomControls:
-                                                                  true,
-                                                              showLocation:
-                                                                  false,
-                                                              showCompass:
-                                                                  false,
-                                                              showMapToolbar:
-                                                                  false,
-                                                              showTraffic:
-                                                                  false,
-                                                              centerMapOnMarkerTap:
-                                                                  true,
-                                                            );
-                                                          });
-                                                        },
-                                                      ),
-                                                    FutureBuilder<
-                                                        ApiCallResponse>(
-                                                      future: GetCoordinatesCall
-                                                          .call(
-                                                        location: _model
-                                                            .locationDropdownValue,
-                                                      ),
-                                                      builder:
-                                                          (context, snapshot) {
-                                                        // Customize what your widget looks like when it's loading.
-                                                        if (!snapshot.hasData) {
-                                                          return Center(
-                                                            child: SizedBox(
-                                                              width: 50.0,
-                                                              height: 50.0,
-                                                              child:
-                                                                  CircularProgressIndicator(
-                                                                valueColor:
-                                                                    AlwaysStoppedAnimation<
-                                                                        Color>(
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primary,
-                                                                ),
-                                                              ),
+                                                      if (_model.sLocationDropdownValue ==
+                                                              null ||
+                                                          _model.sLocationDropdownValue ==
+                                                              '')
+                                                        Align(
+                                                          alignment:
+                                                              AlignmentDirectional(
+                                                                  0.00, 0.00),
+                                                          child:
+                                                              FlutterFlowIconButton(
+                                                            borderColor:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondary,
+                                                            borderRadius: 30.0,
+                                                            borderWidth: 0.0,
+                                                            buttonSize: 60.0,
+                                                            fillColor: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .secondaryBackground,
+                                                            icon: Icon(
+                                                              Icons.play_arrow,
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .secondary,
+                                                              size: 30.0,
                                                             ),
-                                                          );
-                                                        }
-                                                        final livingLabMapGetCoordinatesResponse =
-                                                            snapshot.data!;
-                                                        return Container(
-                                                          width:
-                                                              double.infinity,
-                                                          height: 180.0,
-                                                          child: custom_widgets
-                                                              .LivingLabMap(
-                                                            width:
-                                                                double.infinity,
-                                                            height: 180.0,
-                                                            radius: _model
-                                                                .sSliderRadiusValue!,
-                                                            target: FFAppState()
-                                                                        .location ==
-                                                                    null
-                                                                ? functions.getLatLng(
+                                                            showLoadingIndicator:
+                                                                true,
+                                                            onPressed:
+                                                                () async {
+                                                              await actions
+                                                                  .launchURLInWebView(
+                                                                context,
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryBackground,
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primary,
+                                                              );
+                                                            },
+                                                          ),
+                                                        ),
+                                                      if ((_model.sLocationDropdownValue !=
+                                                                  null &&
+                                                              _model.sLocationDropdownValue !=
+                                                                  '') &&
+                                                          (_model.sSliderRadiusValue !=
+                                                              null))
+                                                        FutureBuilder<
+                                                            ApiCallResponse>(
+                                                          future:
+                                                              GetCoordinatesCall
+                                                                  .call(
+                                                            location: _model
+                                                                .sLocationDropdownValue,
+                                                          ),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            // Customize what your widget looks like when it's loading.
+                                                            if (!snapshot
+                                                                .hasData) {
+                                                              return Center(
+                                                                child: SizedBox(
+                                                                  width: 50.0,
+                                                                  height: 50.0,
+                                                                  child:
+                                                                      CircularProgressIndicator(
+                                                                    valueColor:
+                                                                        AlwaysStoppedAnimation<
+                                                                            Color>(
+                                                                      FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .primary,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            }
+                                                            final livingLabMapGetCoordinatesResponse =
+                                                                snapshot.data!;
+                                                            return Container(
+                                                              width: double
+                                                                  .infinity,
+                                                              height: double
+                                                                  .infinity,
+                                                              child: custom_widgets
+                                                                  .LivingLabMap(
+                                                                width: double
+                                                                    .infinity,
+                                                                height: double
+                                                                    .infinity,
+                                                                radius: _model
+                                                                    .sSliderRadiusValue!,
+                                                                target: FFAppState()
+                                                                            .location ==
+                                                                        null
+                                                                    ? functions.getLatLng(
+                                                                        functions.formatCoords(GetCoordinatesCall.lat(
+                                                                          livingLabMapGetCoordinatesResponse
+                                                                              .jsonBody,
+                                                                        ).toString()),
+                                                                        functions.formatCoords(GetCoordinatesCall.lng(
+                                                                          livingLabMapGetCoordinatesResponse
+                                                                              .jsonBody,
+                                                                        ).toString()))
+                                                                    : FFAppState().location!,
+                                                                center: functions.getLatLng(
                                                                     functions.formatCoords(GetCoordinatesCall.lat(
                                                                       livingLabMapGetCoordinatesResponse
                                                                           .jsonBody,
@@ -949,27 +998,13 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                                     functions.formatCoords(GetCoordinatesCall.lng(
                                                                       livingLabMapGetCoordinatesResponse
                                                                           .jsonBody,
-                                                                    ).toString()))
-                                                                : FFAppState().location!,
-                                                            center: functions
-                                                                .getLatLng(
-                                                                    functions.formatCoords(GetCoordinatesCall
-                                                                            .lat(
-                                                                      livingLabMapGetCoordinatesResponse
-                                                                          .jsonBody,
-                                                                    )
-                                                                        .toString()),
-                                                                    functions.formatCoords(
-                                                                        GetCoordinatesCall
-                                                                            .lng(
-                                                                      livingLabMapGetCoordinatesResponse
-                                                                          .jsonBody,
                                                                     ).toString())),
-                                                          ),
-                                                        );
-                                                      },
-                                                    ),
-                                                  ],
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -1359,8 +1394,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                   ),
                                 ),
                                 if ((getJsonField(
-                                          (_model.nearbyLocationResult
-                                                  ?.jsonBody ??
+                                          (_model.locationsResult?.jsonBody ??
                                               ''),
                                           r'''$.succesful_results''',
                                         ) !=
@@ -1378,7 +1412,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                   8.0, 0.0, 0.0, 0.0),
                                           child: Text(
                                             '${functions.listLength(GetNearbyLocationsCall.locationList(
-                                                  (_model.nearbyLocationResult
+                                                  (_model.locationsResultCopy
                                                           ?.jsonBody ??
                                                       ''),
                                                 )!.toList()).toString()} Results',
@@ -1396,40 +1430,36 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                       ],
                                     ),
                                   ),
-                                if ((getJsonField(
-                                          (_model.nearbyLocationResult
-                                                  ?.jsonBody ??
-                                              ''),
-                                          r'''$.succesful_results''',
-                                        ) !=
-                                        null) &&
-                                    (FFAppState().refreshed != true))
+                                if ((FFAppState().refreshed != true) &&
+                                    responsiveVisibility(
+                                      context: context,
+                                      tabletLandscape: false,
+                                      desktop: false,
+                                    ))
                                   Container(
                                     width: MediaQuery.sizeOf(context).width *
                                         0.965,
-                                    height: 335.0,
+                                    height: 316.0,
                                     decoration: BoxDecoration(
                                       color: Color(0xFFD4FFE6),
                                     ),
                                     child: Builder(
                                       builder: (context) {
-                                        final locationResults =
-                                            GetNearbyLocationsCall.locationList(
-                                                  (_model.nearbyLocationResult
-                                                          ?.jsonBody ??
-                                                      ''),
-                                                )?.toList() ??
-                                                [];
+                                        final locations = getJsonField(
+                                          (_model.nearbyLocationResult
+                                                  ?.jsonBody ??
+                                              ''),
+                                          r'''$.succesful_results''',
+                                        ).toList();
                                         return ListView.builder(
                                           padding: EdgeInsets.zero,
                                           shrinkWrap: true,
                                           scrollDirection: Axis.horizontal,
-                                          itemCount: locationResults.length,
+                                          itemCount: locations.length,
                                           itemBuilder:
-                                              (context, locationResultsIndex) {
-                                            final locationResultsItem =
-                                                locationResults[
-                                                    locationResultsIndex];
+                                              (context, locationsIndex) {
+                                            final locationsItem =
+                                                locations[locationsIndex];
                                             return Padding(
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(8.0, 8.0, 8.0, 8.0),
@@ -1445,7 +1475,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                         functions
                                                             .latLngFromLocation(
                                                                 getJsonField(
-                                                      locationResultsItem,
+                                                      locationsItem,
                                                       r'''$.location_coord''',
                                                     ).toString());
                                                   });
@@ -1460,7 +1490,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                   ),
                                                   child: Container(
                                                     width: 358.0,
-                                                    height: 331.0,
+                                                    height: 474.0,
                                                     decoration: BoxDecoration(
                                                       color: FlutterFlowTheme
                                                               .of(context)
@@ -1507,7 +1537,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                                       0.0, 0.0),
                                                               children: [
                                                                 if (getJsonField(
-                                                                      locationResultsItem,
+                                                                      locationsItem,
                                                                       r'''$.photo_reference''',
                                                                     ) ==
                                                                     'None')
@@ -1520,7 +1550,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                                     size: 150.0,
                                                                   ),
                                                                 if (getJsonField(
-                                                                      locationResultsItem,
+                                                                      locationsItem,
                                                                       r'''$.photo_reference''',
                                                                     ) !=
                                                                     'None')
@@ -1551,7 +1581,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                                               milliseconds: 700),
                                                                       imageUrl:
                                                                           'https://maps.googleapis.com/maps/api/place/photo?maxwidth=358&photo_reference=${getJsonField(
-                                                                        locationResultsItem,
+                                                                        locationsItem,
                                                                         r'''$.photo_reference''',
                                                                       ).toString()}&key=AIzaSyAsH8omDk8y0lSGLTW9YtZiiQ2MkmsF-uQ',
                                                                       width:
@@ -1574,7 +1604,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                                       4.0),
                                                           child: Text(
                                                             getJsonField(
-                                                              locationResultsItem,
+                                                              locationsItem,
                                                               r'''$.place_name''',
                                                             )
                                                                 .toString()
@@ -1603,7 +1633,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                               EdgeInsetsDirectional
                                                                   .fromSTEB(
                                                                       4.0,
-                                                                      0.0,
+                                                                      4.0,
                                                                       4.0,
                                                                       4.0),
                                                           child: FutureBuilder<
@@ -1614,13 +1644,13 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                               origins:
                                                                   GetNearbyLocationsIdCall
                                                                       .centerCoordinate(
-                                                                (_model.placeIdsResult
+                                                                (_model.locationsIdResult
                                                                         ?.jsonBody ??
                                                                     ''),
                                                               ).toString(),
                                                               destinations:
                                                                   getJsonField(
-                                                                locationResultsItem,
+                                                                locationsItem,
                                                                 r'''$.location_coord''',
                                                               ).toString(),
                                                             ),
@@ -1631,13 +1661,13 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                                   .hasData) {
                                                                 return DistancePlaceholderWidget();
                                                               }
-                                                              final nameCalculateDistanceResponse =
+                                                              final distanceCalculateDistanceResponse =
                                                                   snapshot
                                                                       .data!;
                                                               return Text(
-                                                                'Driving distance ${valueOrDefault<String>(
+                                                                'Driving Distance ${valueOrDefault<String>(
                                                                   getJsonField(
-                                                                    nameCalculateDistanceResponse
+                                                                    distanceCalculateDistanceResponse
                                                                         .jsonBody,
                                                                     r'''$.rows[:].elements[:].distance.text''',
                                                                   ).toString(),
@@ -1700,7 +1730,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                               ),
                                                               Text(
                                                                 getJsonField(
-                                                                  locationResultsItem,
+                                                                  locationsItem,
                                                                   r'''$.address''',
                                                                 )
                                                                     .toString()
@@ -1763,7 +1793,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                               ),
                                                               Text(
                                                                 getJsonField(
-                                                                  locationResultsItem,
+                                                                  locationsItem,
                                                                   r'''$.website''',
                                                                 )
                                                                     .toString()
@@ -1825,7 +1855,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                               ),
                                                               Text(
                                                                 getJsonField(
-                                                                  locationResultsItem,
+                                                                  locationsItem,
                                                                   r'''$.phone''',
                                                                 )
                                                                     .toString()
@@ -1889,7 +1919,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            8.0, 32.0, 8.0, 24.0),
+                                            8.0, 24.0, 8.0, 12.0),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment:
@@ -2552,7 +2582,6 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                                 if (responsiveVisibility(
                                                                   context:
                                                                       context,
-                                                                  phone: false,
                                                                   tablet: false,
                                                                 ))
                                                                   Container(
@@ -2657,7 +2686,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                                                           return Material(
                                                                                             color: Colors.transparent,
                                                                                             child: GestureDetector(
-                                                                                              onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
+                                                                                              onTap: () => _model.unfocusNode.canRequestFocus ? FocusScope.of(context).requestFocus(_model.unfocusNode) : FocusScope.of(context).unfocus(),
                                                                                               child: EmailWidget(
                                                                                                 locations: GetNearbyLocationsCall.locationList(
                                                                                                   (_model.locationsResult?.jsonBody ?? ''),
@@ -2766,7 +2795,10 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                                                     ) !=
                                                                                     null) {
                                                                                   _model.locationsIdResult = await GetNearbyLocationsIdCall.call(
-                                                                                    radius1: 0,
+                                                                                    radius1: valueOrDefault<int>(
+                                                                                      random_data.randomInteger(0, 0),
+                                                                                      0,
+                                                                                    ),
                                                                                     radius2: functions.toInt(_model.sliderRadius2Value!.toString()),
                                                                                     centerLon: functions.formatCoords(GetCoordinatesCall.lng(
                                                                                       (_model.coordinateResult?.jsonBody ?? ''),
@@ -2965,19 +2997,24 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                             ].addToStart(SizedBox(width: 12.0)),
                                           ),
                                         ),
-                                      if ((getJsonField(
-                                                (_model.locationsResult
-                                                        ?.jsonBody ??
-                                                    ''),
-                                                r'''$.succesful_results''',
-                                              ) !=
-                                              null) &&
-                                          (FFAppState().refreshed != true))
+                                      if (((getJsonField(
+                                                    (_model.locationsResult
+                                                            ?.jsonBody ??
+                                                        ''),
+                                                    r'''$.succesful_results''',
+                                                  ) !=
+                                                  null) &&
+                                              (FFAppState().refreshed !=
+                                                  true)) &&
+                                          responsiveVisibility(
+                                            context: context,
+                                            phone: false,
+                                          ))
                                         Container(
                                           width:
                                               MediaQuery.sizeOf(context).width *
-                                                  0.96,
-                                          height: 335.0,
+                                                  0.99,
+                                          height: 307.0,
                                           decoration: BoxDecoration(
                                             color: Color(0xFFD4FFE6),
                                           ),
@@ -3042,7 +3079,7 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                         ),
                                                         child: Container(
                                                           width: 358.0,
-                                                          height: 331.0,
+                                                          height: 380.0,
                                                           decoration:
                                                               BoxDecoration(
                                                             color: FlutterFlowTheme
@@ -3449,369 +3486,202 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
               ),
               if (responsiveVisibility(
                 context: context,
+                phone: false,
+                tablet: false,
                 tabletLandscape: false,
-                desktop: false,
               ))
-                Container(
-                  width: MediaQuery.sizeOf(context).width * 1.0,
-                  height: MediaQuery.sizeOf(context).height * 0.08,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (FFAppState().refreshed != true)
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Builder(
-                              builder: (context) => FlutterFlowIconButton(
-                                borderColor: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                buttonSize: 40.0,
-                                fillColor: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                icon: Icon(
-                                  Icons.file_download_outlined,
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  size: 20.0,
-                                ),
-                                showLoadingIndicator: true,
-                                onPressed: () async {
-                                  if ((getJsonField(
-                                            (_model.nearbyLocationResult
-                                                    ?.jsonBody ??
-                                                ''),
-                                            r'''$.succesful_results''',
-                                          ) !=
-                                          null) &&
-                                      (FFAppState().refreshed != true)) {
-                                    _model.first25 =
-                                        await CalculateDistanceCall.call(
-                                      origins: GetNearbyLocationsIdCall
-                                          .centerCoordinate(
-                                        (_model.placeIdsResult?.jsonBody ?? ''),
-                                      ).toString(),
-                                      destinations: functions.joinCoords(
-                                          (GetNearbyLocationsCall.coordinates(
-                                        (_model.nearbyLocationResult
-                                                ?.jsonBody ??
-                                            ''),
-                                      ) as List)
-                                              .map<String>((s) => s.toString())
-                                              .toList()!
-                                              .take(25)
-                                              .toList()),
-                                    );
-                                    _model.next25 =
-                                        await CalculateDistanceCall.call(
-                                      origins: GetNearbyLocationsIdCall
-                                          .centerCoordinate(
-                                        (_model.placeIdsResult?.jsonBody ?? ''),
-                                      ).toString(),
-                                      destinations: functions.joinCoords(
-                                          functions
-                                              .sublist(
-                                                  25,
-                                                  50,
-                                                  (GetNearbyLocationsCall
-                                                          .coordinates(
-                                                    (_model.nearbyLocationResult
-                                                            ?.jsonBody ??
-                                                        ''),
-                                                  ) as List)
-                                                      .map<String>(
-                                                          (s) => s.toString())
-                                                      .toList()!
-                                                      .toList())
-                                              .toList()),
-                                    );
-                                    _model.last5 =
-                                        await CalculateDistanceCall.call(
-                                      origins: GetNearbyLocationsIdCall
-                                          .centerCoordinate(
-                                        (_model.placeIdsResult?.jsonBody ?? ''),
-                                      ).toString(),
-                                      destinations: functions.joinCoords(
-                                          functions
-                                              .sublist(
-                                                  50,
-                                                  75,
-                                                  (GetNearbyLocationsCall
-                                                          .coordinates(
-                                                    (_model.nearbyLocationResult
-                                                            ?.jsonBody ??
-                                                        ''),
-                                                  ) as List)
-                                                      .map<String>(
-                                                          (s) => s.toString())
-                                                      .toList()!
-                                                      .toList())
-                                              .toList()),
-                                    );
-                                    await showAlignedDialog(
-                                      context: context,
-                                      isGlobal: true,
-                                      avoidOverflow: false,
-                                      targetAnchor: AlignmentDirectional(
-                                              0.0, 0.0)
-                                          .resolve(Directionality.of(context)),
-                                      followerAnchor: AlignmentDirectional(
-                                              0.0, 0.0)
-                                          .resolve(Directionality.of(context)),
-                                      builder: (dialogContext) {
-                                        return Material(
-                                          color: Colors.transparent,
-                                          child: GestureDetector(
-                                            onTap: () => FocusScope.of(context)
-                                                .requestFocus(
-                                                    _model.unfocusNode),
-                                            child: EmailWidget(
-                                              locations: GetNearbyLocationsCall
-                                                  .locationList(
-                                                (_model.nearbyLocationResult
-                                                        ?.jsonBody ??
-                                                    ''),
-                                              )!,
-                                              query: _model.sQueryDropdownValue,
-                                              location: _model
-                                                  .sLocationDropdownValue!,
-                                              distances: functions.joinLists(
-                                                  (CalculateDistanceCall
-                                                          .distance(
-                                                    (_model.first25?.jsonBody ??
-                                                        ''),
-                                                  ) as List)
-                                                      .map<String>(
-                                                          (s) => s.toString())
-                                                      .toList()
-                                                      ?.toList(),
-                                                  (CalculateDistanceCall
-                                                          .distance(
-                                                    (_model.next25?.jsonBody ??
-                                                        ''),
-                                                  ) as List)
-                                                      .map<String>(
-                                                          (s) => s.toString())
-                                                      .toList()
-                                                      ?.toList(),
-                                                  (CalculateDistanceCall
-                                                          .distance(
-                                                    (_model.last5?.jsonBody ??
-                                                        ''),
-                                                  ) as List)
-                                                      .map<String>(
-                                                          (s) => s.toString())
-                                                      .toList()
-                                                      ?.toList())!,
-                                              distance:
-                                                  _model.sSliderRadiusValue!,
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 6.0),
+                  child: Container(
+                    width: MediaQuery.sizeOf(context).width * 1.0,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      borderRadius: BorderRadius.circular(0.0),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (FFAppState().refreshed != true)
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Builder(
+                                builder: (context) => FlutterFlowIconButton(
+                                  borderColor: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  buttonSize: 40.0,
+                                  fillColor: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  icon: Icon(
+                                    Icons.file_download_outlined,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    size: 20.0,
+                                  ),
+                                  showLoadingIndicator: true,
+                                  onPressed: () async {
+                                    var _shouldSetState = false;
+                                    if ((getJsonField(
+                                              (_model.locationsResult
+                                                      ?.jsonBody ??
+                                                  ''),
+                                              r'''$.succesful_results''',
+                                            ) !=
+                                            null) &&
+                                        (FFAppState().refreshed != true)) {
+                                      _model.lFirst25Copy =
+                                          await CalculateDistanceCall.call(
+                                        origins: GetNearbyLocationsIdCall
+                                            .centerCoordinate(
+                                          (_model.locationsIdResult?.jsonBody ??
+                                              ''),
+                                        ).toString(),
+                                        destinations: functions.joinCoords(
+                                            (GetNearbyLocationsCall.coordinates(
+                                          (_model.locationsResult?.jsonBody ??
+                                              ''),
+                                        ) as List)
+                                                .map<String>(
+                                                    (s) => s.toString())
+                                                .toList()!
+                                                .take(25)
+                                                .toList()),
+                                      );
+                                      _shouldSetState = true;
+                                      _model.lNext25Copy =
+                                          await CalculateDistanceCall.call(
+                                        origins: GetNearbyLocationsIdCall
+                                            .centerCoordinate(
+                                          (_model.locationsIdResult?.jsonBody ??
+                                              ''),
+                                        ).toString(),
+                                        destinations: functions.joinCoords(
+                                            functions
+                                                .sublist(
+                                                    25,
+                                                    50,
+                                                    (GetNearbyLocationsCall
+                                                            .coordinates(
+                                                      (_model.locationsResult
+                                                              ?.jsonBody ??
+                                                          ''),
+                                                    ) as List)
+                                                        .map<String>(
+                                                            (s) => s.toString())
+                                                        .toList()!
+                                                        .toList())
+                                                .toList()),
+                                      );
+                                      _shouldSetState = true;
+                                      _model.lLast25Copy =
+                                          await CalculateDistanceCall.call(
+                                        origins: GetNearbyLocationsIdCall
+                                            .centerCoordinate(
+                                          (_model.locationsIdResult?.jsonBody ??
+                                              ''),
+                                        ).toString(),
+                                        destinations: functions.joinCoords(
+                                            functions
+                                                .sublist(
+                                                    50,
+                                                    75,
+                                                    (GetNearbyLocationsCall
+                                                            .coordinates(
+                                                      (_model.locationsResult
+                                                              ?.jsonBody ??
+                                                          ''),
+                                                    ) as List)
+                                                        .map<String>(
+                                                            (s) => s.toString())
+                                                        .toList()!
+                                                        .toList())
+                                                .toList()),
+                                      );
+                                      _shouldSetState = true;
+                                      await showAlignedDialog(
+                                        context: context,
+                                        isGlobal: true,
+                                        avoidOverflow: false,
+                                        targetAnchor:
+                                            AlignmentDirectional(0.0, 0.0)
+                                                .resolve(
+                                                    Directionality.of(context)),
+                                        followerAnchor:
+                                            AlignmentDirectional(0.0, 0.0)
+                                                .resolve(
+                                                    Directionality.of(context)),
+                                        builder: (dialogContext) {
+                                          return Material(
+                                            color: Colors.transparent,
+                                            child: GestureDetector(
+                                              onTap: () => _model.unfocusNode
+                                                      .canRequestFocus
+                                                  ? FocusScope.of(context)
+                                                      .requestFocus(
+                                                          _model.unfocusNode)
+                                                  : FocusScope.of(context)
+                                                      .unfocus(),
+                                              child: EmailWidget(
+                                                locations:
+                                                    GetNearbyLocationsCall
+                                                        .locationList(
+                                                  (_model.locationsResult
+                                                          ?.jsonBody ??
+                                                      ''),
+                                                )!,
+                                                query:
+                                                    _model.queryDropdownValue,
+                                                location: _model
+                                                    .locationDropdownValue!,
+                                                distances: functions.joinLists(
+                                                    (CalculateDistanceCall
+                                                            .distance(
+                                                      (_model.lFirst25Copy
+                                                              ?.jsonBody ??
+                                                          ''),
+                                                    ) as List)
+                                                        .map<String>(
+                                                            (s) => s.toString())
+                                                        .toList()
+                                                        ?.toList(),
+                                                    (CalculateDistanceCall
+                                                            .distance(
+                                                      (_model.lNext25Copy
+                                                              ?.jsonBody ??
+                                                          ''),
+                                                    ) as List)
+                                                        .map<String>(
+                                                            (s) => s.toString())
+                                                        .toList()
+                                                        ?.toList(),
+                                                    (CalculateDistanceCall
+                                                            .distance(
+                                                      (_model.lLast25Copy
+                                                              ?.jsonBody ??
+                                                          ''),
+                                                    ) as List)
+                                                        .map<String>(
+                                                            (s) => s.toString())
+                                                        .toList()
+                                                        ?.toList())!,
+                                                distance:
+                                                    _model.sliderRadius2Value!,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                    ).then((value) => setState(() {}));
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'No content to download, submit location query then try again.',
-                                          style: GoogleFonts.getFont(
-                                            'Poppins',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            fontSize: 16.0,
-                                          ),
-                                        ),
-                                        duration: Duration(milliseconds: 4000),
-                                        backgroundColor:
-                                            FlutterFlowTheme.of(context)
-                                                .secondaryBackground,
-                                      ),
-                                    );
-                                  }
+                                          );
+                                        },
+                                      ).then((value) => setState(() {}));
 
-                                  setState(() {});
-                                },
-                              ),
-                            ),
-                            Text(
-                              'Download',
-                              style: GoogleFonts.getFont(
-                                'Poppins',
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 13.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          FlutterFlowIconButton(
-                            borderColor: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            borderRadius: 30.0,
-                            buttonSize: 40.0,
-                            fillColor: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            icon: Icon(
-                              Icons.refresh_outlined,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 20.0,
-                            ),
-                            onPressed: () async {
-                              setState(() {
-                                _model.sQueryDropdownValueController?.reset();
-                                _model.sLocationDropdownValueController
-                                    ?.reset();
-                              });
-                              setState(() {
-                                _model.sSliderRadiusValue = 0.0;
-                              });
-                              setState(() {
-                                FFAppState().refreshed = true;
-                                FFAppState().location = null;
-                              });
-                            },
-                          ),
-                          Text(
-                            'Refresh',
-                            style: GoogleFonts.getFont(
-                              'Poppins',
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          FlutterFlowIconButton(
-                            borderColor: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            borderRadius: 20.0,
-                            borderWidth: 0.0,
-                            buttonSize: 40.0,
-                            fillColor: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            icon: Icon(
-                              Icons.search_sharp,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 20.0,
-                            ),
-                            showLoadingIndicator: true,
-                            onPressed: () async {
-                              // Validate Form 1
-                              if (_model.formKey2.currentState == null ||
-                                  !_model.formKey2.currentState!.validate()) {
-                                return;
-                              }
-                              if (_model.sQueryDropdownValue == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Select the query to proceed',
-                                      style: GoogleFonts.getFont(
-                                        'Poppins',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
-                                    duration: Duration(milliseconds: 4000),
-                                    backgroundColor:
-                                        FlutterFlowTheme.of(context).secondary,
-                                  ),
-                                );
-                                return;
-                              }
-                              if (_model.sLocationDropdownValue == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Choose the location to proceed',
-                                      style: GoogleFonts.getFont(
-                                        'Poppins',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
-                                    duration: Duration(milliseconds: 4000),
-                                    backgroundColor:
-                                        FlutterFlowTheme.of(context).secondary,
-                                  ),
-                                );
-                                return;
-                              }
-                              _model.locationCoordinateResult =
-                                  await GetCoordinatesCall.call(
-                                location: _model.sLocationDropdownValue,
-                              );
-                              if (getJsonField(
-                                    (_model.locationCoordinateResult
-                                            ?.jsonBody ??
-                                        ''),
-                                    r'''$.data''',
-                                  ) !=
-                                  null) {
-                                _model.placeIdsResult =
-                                    await GetNearbyLocationsIdCall.call(
-                                  radius1: 0,
-                                  radius2: functions.toInt(
-                                      _model.sSliderRadiusValue!.toString()),
-                                  centerLon: functions
-                                      .formatLng(GetCoordinatesCall.lng(
-                                    (_model.locationCoordinateResult
-                                            ?.jsonBody ??
-                                        ''),
-                                  ).toString()),
-                                  queryString: _model.sQueryDropdownValue,
-                                  centerLat: functions
-                                      .formatCoords(GetCoordinatesCall.lat(
-                                    (_model.locationCoordinateResult
-                                            ?.jsonBody ??
-                                        ''),
-                                  ).toString()),
-                                );
-                                if ((_model.placeIdsResult?.succeeded ??
-                                    true)) {
-                                  _model.nearbyLocationResult =
-                                      await GetNearbyLocationsCall.call(
-                                    placeIdsList:
-                                        (GetNearbyLocationsIdCall.iDsList(
-                                      (_model.placeIdsResult?.jsonBody ?? ''),
-                                    ) as List)
-                                            .map<String>((s) => s.toString())
-                                            .toList(),
-                                    centerCoord: GetNearbyLocationsIdCall
-                                        .centerCoordinate(
-                                      (_model.placeIdsResult?.jsonBody ?? ''),
-                                    ).toString(),
-                                  );
-                                  if ((_model.nearbyLocationResult?.succeeded ??
-                                      true)) {
-                                    if (!functions.isListEmpty(
-                                        GetNearbyLocationsCall.locationList(
-                                      (_model.nearbyLocationResult?.jsonBody ??
-                                          ''),
-                                    )!
-                                            .toList())) {
+                                      if (_shouldSetState) setState(() {});
+                                      return;
+                                    } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
                                           content: Text(
-                                            'Items ready for download!',
+                                            'No content to download, submit location query then try again.',
                                             style: GoogleFonts.getFont(
                                               'Poppins',
                                               color:
@@ -3827,63 +3697,755 @@ class _NearbyLocationsWidgetState extends State<NearbyLocationsWidget> {
                                                   .secondary,
                                         ),
                                       );
+                                      if (_shouldSetState) setState(() {});
+                                      return;
                                     }
-                                    setState(() {
-                                      FFAppState().refreshed = false;
-                                    });
+
+                                    if (_shouldSetState) setState(() {});
+                                  },
+                                ),
+                              ),
+                              Text(
+                                'Download',
+                                style: GoogleFonts.getFont(
+                                  'Poppins',
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryText,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            FlutterFlowIconButton(
+                              borderColor: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              borderRadius: 30.0,
+                              buttonSize: 40.0,
+                              fillColor: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              icon: Icon(
+                                Icons.refresh_outlined,
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                size: 20.0,
+                              ),
+                              onPressed: () async {
+                                setState(() {
+                                  _model.queryDropdownValueController?.reset();
+                                  _model.locationDropdownValueController
+                                      ?.reset();
+                                });
+                                setState(() {
+                                  _model.sSliderRadiusValue = 0.0;
+                                });
+                                setState(() {
+                                  FFAppState().refreshed = true;
+                                  FFAppState().location = null;
+                                });
+                              },
+                            ),
+                            Text(
+                              'Refresh',
+                              style: GoogleFonts.getFont(
+                                'Poppins',
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            FlutterFlowIconButton(
+                              borderColor: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              borderRadius: 20.0,
+                              borderWidth: 0.0,
+                              buttonSize: 40.0,
+                              fillColor: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              icon: Icon(
+                                Icons.search_sharp,
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                size: 20.0,
+                              ),
+                              showLoadingIndicator: true,
+                              onPressed: () async {
+                                var _shouldSetState = false;
+                                // Validate Form 1
+                                if (_model.formKey1.currentState == null ||
+                                    !_model.formKey1.currentState!.validate()) {
+                                  return;
+                                }
+                                if (_model.queryDropdownValue == null) {
+                                  return;
+                                }
+                                if (_model.locationDropdownValue == null) {
+                                  return;
+                                }
+                                _model.coordinateResultCopy =
+                                    await GetCoordinatesCall.call(
+                                  location: _model.locationDropdownValue,
+                                );
+                                _shouldSetState = true;
+                                if (getJsonField(
+                                      (_model.coordinateResult?.jsonBody ?? ''),
+                                      r'''$.data''',
+                                    ) !=
+                                    null) {
+                                  _model.locationsIdResultCopy =
+                                      await GetNearbyLocationsIdCall.call(
+                                    radius1: valueOrDefault<int>(
+                                      random_data.randomInteger(0, 0),
+                                      0,
+                                    ),
+                                    radius2: functions.toInt(
+                                        _model.sliderRadius2Value!.toString()),
+                                    centerLon: functions
+                                        .formatCoords(GetCoordinatesCall.lng(
+                                      (_model.coordinateResult?.jsonBody ?? ''),
+                                    ).toString()),
+                                    queryString: _model.queryDropdownValue,
+                                    centerLat: functions
+                                        .formatCoords(GetCoordinatesCall.lat(
+                                      (_model.coordinateResult?.jsonBody ?? ''),
+                                    ).toString()),
+                                  );
+                                  _shouldSetState = true;
+                                  if ((_model.locationsIdResult?.succeeded ??
+                                      true)) {
+                                    _model.locationsResultCopy =
+                                        await GetNearbyLocationsCall.call(
+                                      placeIdsList:
+                                          (GetNearbyLocationsIdCall.iDsList(
+                                        (_model.locationsIdResult?.jsonBody ??
+                                            ''),
+                                      ) as List)
+                                              .map<String>((s) => s.toString())
+                                              .toList(),
+                                      centerCoord: GetNearbyLocationsIdCall
+                                          .centerCoordinate(
+                                        (_model.locationsIdResult?.jsonBody ??
+                                            ''),
+                                      ).toString(),
+                                    );
+                                    _shouldSetState = true;
+                                    if ((_model.locationsResult?.succeeded ??
+                                        true)) {
+                                      if (!functions.isListEmpty(
+                                          GetNearbyLocationsCall.locationList(
+                                        (_model.locationsResult?.jsonBody ??
+                                            ''),
+                                      )!
+                                              .toList())) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Items ready for download!',
+                                              style: GoogleFonts.getFont(
+                                                'Poppins',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                fontSize: 16.0,
+                                              ),
+                                            ),
+                                            duration:
+                                                Duration(milliseconds: 4000),
+                                            backgroundColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .secondary,
+                                          ),
+                                        );
+                                      }
+                                      setState(() {
+                                        FFAppState().refreshed = false;
+                                      });
+                                      if (_shouldSetState) setState(() {});
+                                      return;
+                                    } else {
+                                      await showDialog(
+                                        context: context,
+                                        builder: (alertDialogContext) {
+                                          return AlertDialog(
+                                            title:
+                                                Text('Nearby Locations Failed'),
+                                            content: Text(
+                                                'Failed to get nearby locations,try again.'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    alertDialogContext),
+                                                child: Text('Dismiss'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                      if (_shouldSetState) setState(() {});
+                                      return;
+                                    }
+                                  } else {
+                                    if (_shouldSetState) setState(() {});
+                                    return;
                                   }
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'No',
-                                        style: TextStyle(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
-                                        ),
-                                      ),
-                                      duration: Duration(milliseconds: 4000),
-                                      backgroundColor:
-                                          FlutterFlowTheme.of(context)
-                                              .secondary,
-                                    ),
+                                  await showDialog(
+                                    context: context,
+                                    builder: (alertDialogContext) {
+                                      return AlertDialog(
+                                        title: Text('Failed'),
+                                        content: Text(
+                                            'Could not get location coordinates, try again'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(
+                                                alertDialogContext),
+                                            child: Text('Ok'),
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   );
+                                  if (_shouldSetState) setState(() {});
+                                  return;
                                 }
-                              } else {
-                                await showDialog(
-                                  context: context,
-                                  builder: (alertDialogContext) {
-                                    return AlertDialog(
-                                      title: Text('Failed'),
-                                      content: Text(
-                                          'Could not get location coordinates, try again'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(alertDialogContext),
-                                          child: Text('Ok'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              }
 
-                              setState(() {});
-                            },
-                          ),
-                          Text(
-                            'Search',
-                            style: GoogleFonts.getFont(
-                              'Poppins',
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13.0,
+                                if (_shouldSetState) setState(() {});
+                              },
                             ),
-                          ),
-                        ],
+                            Text(
+                              'Search',
+                              style: GoogleFonts.getFont(
+                                'Poppins',
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              if (responsiveVisibility(
+                context: context,
+                tabletLandscape: false,
+                desktop: false,
+              ))
+                Expanded(
+                  child: Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width * 1.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        borderRadius: BorderRadius.circular(0.0),
                       ),
-                    ],
+                      child: Visibility(
+                        visible: responsiveVisibility(
+                          context: context,
+                          tabletLandscape: false,
+                          desktop: false,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (FFAppState().refreshed != true)
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Builder(
+                                    builder: (context) => FlutterFlowIconButton(
+                                      borderColor: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      borderRadius: 30.0,
+                                      buttonSize: 40.0,
+                                      fillColor: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      icon: Icon(
+                                        Icons.file_download_outlined,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        size: 20.0,
+                                      ),
+                                      showLoadingIndicator: true,
+                                      onPressed: () async {
+                                        if ((getJsonField(
+                                                  (_model.nearbyLocationResult
+                                                          ?.jsonBody ??
+                                                      ''),
+                                                  r'''$.succesful_results''',
+                                                ) !=
+                                                null) &&
+                                            (FFAppState().refreshed != true)) {
+                                          _model.first25 =
+                                              await CalculateDistanceCall.call(
+                                            origins: GetNearbyLocationsIdCall
+                                                .centerCoordinate(
+                                              (_model.placeIdsResult
+                                                      ?.jsonBody ??
+                                                  ''),
+                                            ).toString(),
+                                            destinations: functions.joinCoords(
+                                                (GetNearbyLocationsCall
+                                                        .coordinates(
+                                              (_model.nearbyLocationResult
+                                                      ?.jsonBody ??
+                                                  ''),
+                                            ) as List)
+                                                    .map<String>(
+                                                        (s) => s.toString())
+                                                    .toList()!
+                                                    .take(25)
+                                                    .toList()),
+                                          );
+                                          _model.next25 =
+                                              await CalculateDistanceCall.call(
+                                            origins: GetNearbyLocationsIdCall
+                                                .centerCoordinate(
+                                              (_model.placeIdsResult
+                                                      ?.jsonBody ??
+                                                  ''),
+                                            ).toString(),
+                                            destinations: functions.joinCoords(
+                                                functions
+                                                    .sublist(
+                                                        25,
+                                                        50,
+                                                        (GetNearbyLocationsCall
+                                                                .coordinates(
+                                                          (_model.nearbyLocationResult
+                                                                  ?.jsonBody ??
+                                                              ''),
+                                                        ) as List)
+                                                            .map<String>((s) =>
+                                                                s.toString())
+                                                            .toList()!
+                                                            .toList())
+                                                    .toList()),
+                                          );
+                                          _model.last5 =
+                                              await CalculateDistanceCall.call(
+                                            origins: GetNearbyLocationsIdCall
+                                                .centerCoordinate(
+                                              (_model.placeIdsResult
+                                                      ?.jsonBody ??
+                                                  ''),
+                                            ).toString(),
+                                            destinations: functions.joinCoords(
+                                                functions
+                                                    .sublist(
+                                                        50,
+                                                        75,
+                                                        (GetNearbyLocationsCall
+                                                                .coordinates(
+                                                          (_model.nearbyLocationResult
+                                                                  ?.jsonBody ??
+                                                              ''),
+                                                        ) as List)
+                                                            .map<String>((s) =>
+                                                                s.toString())
+                                                            .toList()!
+                                                            .toList())
+                                                    .toList()),
+                                          );
+                                          await showAlignedDialog(
+                                            context: context,
+                                            isGlobal: true,
+                                            avoidOverflow: false,
+                                            targetAnchor: AlignmentDirectional(
+                                                    0.0, 0.0)
+                                                .resolve(
+                                                    Directionality.of(context)),
+                                            followerAnchor:
+                                                AlignmentDirectional(0.0, 0.0)
+                                                    .resolve(Directionality.of(
+                                                        context)),
+                                            builder: (dialogContext) {
+                                              return Material(
+                                                color: Colors.transparent,
+                                                child: GestureDetector(
+                                                  onTap: () => _model
+                                                          .unfocusNode
+                                                          .canRequestFocus
+                                                      ? FocusScope.of(context)
+                                                          .requestFocus(_model
+                                                              .unfocusNode)
+                                                      : FocusScope.of(context)
+                                                          .unfocus(),
+                                                  child: EmailWidget(
+                                                    locations:
+                                                        GetNearbyLocationsCall
+                                                            .locationList(
+                                                      (_model.nearbyLocationResult
+                                                              ?.jsonBody ??
+                                                          ''),
+                                                    )!,
+                                                    query: _model
+                                                        .sQueryDropdownValue,
+                                                    location: _model
+                                                        .sLocationDropdownValue!,
+                                                    distances:
+                                                        functions.joinLists(
+                                                            (CalculateDistanceCall
+                                                                    .distance(
+                                                              (_model.first25
+                                                                      ?.jsonBody ??
+                                                                  ''),
+                                                            ) as List)
+                                                                .map<String>(
+                                                                    (s) => s
+                                                                        .toString())
+                                                                .toList()
+                                                                ?.toList(),
+                                                            (CalculateDistanceCall
+                                                                    .distance(
+                                                              (_model.next25
+                                                                      ?.jsonBody ??
+                                                                  ''),
+                                                            ) as List)
+                                                                .map<String>(
+                                                                    (s) => s
+                                                                        .toString())
+                                                                .toList()
+                                                                ?.toList(),
+                                                            (CalculateDistanceCall
+                                                                    .distance(
+                                                              (_model.last5
+                                                                      ?.jsonBody ??
+                                                                  ''),
+                                                            ) as List)
+                                                                .map<String>((s) =>
+                                                                    s.toString())
+                                                                .toList()
+                                                                ?.toList())!,
+                                                    distance: _model
+                                                        .sSliderRadiusValue!,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ).then((value) => setState(() {}));
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'No content to download, submit location query then try again.',
+                                                style: GoogleFonts.getFont(
+                                                  'Poppins',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 16.0,
+                                                ),
+                                              ),
+                                              duration:
+                                                  Duration(milliseconds: 4000),
+                                              backgroundColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryBackground,
+                                            ),
+                                          );
+                                        }
+
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ),
+                                  Text(
+                                    'Download',
+                                    style: GoogleFonts.getFont(
+                                      'Poppins',
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryText,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13.0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                FlutterFlowIconButton(
+                                  borderColor: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  borderRadius: 30.0,
+                                  buttonSize: 40.0,
+                                  fillColor: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  icon: Icon(
+                                    Icons.refresh_outlined,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    size: 20.0,
+                                  ),
+                                  onPressed: () async {
+                                    setState(() {
+                                      _model.sQueryDropdownValueController
+                                          ?.reset();
+                                      _model.sLocationDropdownValueController
+                                          ?.reset();
+                                    });
+                                    setState(() {
+                                      _model.sSliderRadiusValue = 0.0;
+                                    });
+                                    await actions.resetAPIResults(
+                                      (_model.nearbyLocationResult?.jsonBody ??
+                                          ''),
+                                    );
+                                    setState(() {
+                                      FFAppState().refreshed = true;
+                                      FFAppState().location = null;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  'Refresh',
+                                  style: GoogleFonts.getFont(
+                                    'Poppins',
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 13.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                FlutterFlowIconButton(
+                                  borderColor: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  borderRadius: 20.0,
+                                  borderWidth: 0.0,
+                                  buttonSize: 40.0,
+                                  fillColor: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  icon: Icon(
+                                    Icons.search_sharp,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    size: 20.0,
+                                  ),
+                                  showLoadingIndicator: true,
+                                  onPressed: () async {
+                                    // Validate Form 1
+                                    if (_model.formKey2.currentState == null ||
+                                        !_model.formKey2.currentState!
+                                            .validate()) {
+                                      return;
+                                    }
+                                    if (_model.sQueryDropdownValue == null) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Select the query to proceed',
+                                            style: GoogleFonts.getFont(
+                                              'Poppins',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              fontSize: 16.0,
+                                            ),
+                                          ),
+                                          duration:
+                                              Duration(milliseconds: 4000),
+                                          backgroundColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondary,
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    if (_model.sLocationDropdownValue == null) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Choose the location to proceed',
+                                            style: GoogleFonts.getFont(
+                                              'Poppins',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              fontSize: 16.0,
+                                            ),
+                                          ),
+                                          duration:
+                                              Duration(milliseconds: 4000),
+                                          backgroundColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondary,
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    _model.locationCoordinateResult =
+                                        await GetCoordinatesCall.call(
+                                      location: _model.sLocationDropdownValue,
+                                    );
+                                    if (getJsonField(
+                                          (_model.locationCoordinateResult
+                                                  ?.jsonBody ??
+                                              ''),
+                                          r'''$.data''',
+                                        ) !=
+                                        null) {
+                                      _model.placeIdsResult =
+                                          await GetNearbyLocationsIdCall.call(
+                                        radius1: valueOrDefault<int>(
+                                          random_data.randomInteger(0, 0),
+                                          0,
+                                        ),
+                                        radius2: functions.toInt(_model
+                                            .sSliderRadiusValue!
+                                            .toString()),
+                                        centerLon: functions
+                                            .formatLng(GetCoordinatesCall.lng(
+                                          (_model.locationCoordinateResult
+                                                  ?.jsonBody ??
+                                              ''),
+                                        ).toString()),
+                                        queryString: _model.sQueryDropdownValue,
+                                        centerLat: functions.formatCoords(
+                                            GetCoordinatesCall.lat(
+                                          (_model.locationCoordinateResult
+                                                  ?.jsonBody ??
+                                              ''),
+                                        ).toString()),
+                                      );
+                                      if ((_model.placeIdsResult?.succeeded ??
+                                          true)) {
+                                        _model.nearbyLocationResult =
+                                            await GetNearbyLocationsCall.call(
+                                          placeIdsList:
+                                              (GetNearbyLocationsIdCall.iDsList(
+                                            (_model.placeIdsResult?.jsonBody ??
+                                                ''),
+                                          ) as List)
+                                                  .map<String>(
+                                                      (s) => s.toString())
+                                                  .toList(),
+                                          centerCoord: GetNearbyLocationsIdCall
+                                              .centerCoordinate(
+                                            (_model.placeIdsResult?.jsonBody ??
+                                                ''),
+                                          ).toString(),
+                                        );
+                                        if ((_model.nearbyLocationResult
+                                                ?.succeeded ??
+                                            true)) {
+                                          if (!functions.isListEmpty(
+                                              GetNearbyLocationsCall
+                                                      .locationList(
+                                            (_model.nearbyLocationResult
+                                                    ?.jsonBody ??
+                                                ''),
+                                          )!
+                                                  .toList())) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  'Items ready for download!',
+                                                  style: GoogleFonts.getFont(
+                                                    'Poppins',
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    fontSize: 16.0,
+                                                  ),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 4000),
+                                                backgroundColor:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondary,
+                                              ),
+                                            );
+                                          }
+                                          setState(() {
+                                            FFAppState().refreshed = false;
+                                          });
+                                        }
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'No',
+                                              style: TextStyle(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                              ),
+                                            ),
+                                            duration:
+                                                Duration(milliseconds: 4000),
+                                            backgroundColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .secondary,
+                                          ),
+                                        );
+                                      }
+                                    } else {
+                                      await showDialog(
+                                        context: context,
+                                        builder: (alertDialogContext) {
+                                          return AlertDialog(
+                                            title: Text('Failed'),
+                                            content: Text(
+                                                'Could not get location coordinates, try again'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    alertDialogContext),
+                                                child: Text('Ok'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
+
+                                    setState(() {});
+                                  },
+                                ),
+                                Text(
+                                  'Search',
+                                  style: GoogleFonts.getFont(
+                                    'Poppins',
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 13.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ].divide(SizedBox(width: 8.0)),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
             ],

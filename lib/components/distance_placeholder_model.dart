@@ -1,10 +1,12 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'distance_placeholder_widget.dart' show DistancePlaceholderWidget;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class DistancePlaceholderModel extends FlutterFlowModel {
+class DistancePlaceholderModel
+    extends FlutterFlowModel<DistancePlaceholderWidget> {
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {}

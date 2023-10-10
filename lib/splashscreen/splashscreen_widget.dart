@@ -65,7 +65,9 @@ class _SplashscreenWidgetState extends State<SplashscreenWidget>
     context.watch<FFAppState>();
 
     return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
+      onTap: () => _model.unfocusNode.canRequestFocus
+          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
+          : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Color(0xFF3BB06C),
@@ -87,10 +89,14 @@ class _SplashscreenWidgetState extends State<SplashscreenWidget>
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/images/Group_1.png',
-                  width: MediaQuery.sizeOf(context).width * 0.2,
-                  fit: BoxFit.cover,
+                Hero(
+                  tag: 'dowell',
+                  transitionOnUserGestures: true,
+                  child: Image.asset(
+                    'assets/images/Group_1.png',
+                    width: MediaQuery.sizeOf(context).width * 0.2,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 Text(
                   'Search in UX Living Lab',

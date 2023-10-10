@@ -12,6 +12,8 @@ import '/flutter_flow/form_field_controller.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
+import '/flutter_flow/random_data_util.dart' as random_data;
+import 'nearby_locations_widget.dart' show NearbyLocationsWidget;
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class NearbyLocationsModel extends FlutterFlowModel {
+class NearbyLocationsModel extends FlutterFlowModel<NearbyLocationsWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
@@ -62,6 +64,18 @@ class NearbyLocationsModel extends FlutterFlowModel {
   ApiCallResponse? locationsIdResult;
   // Stores action output result for [Backend Call - API (GetNearbyLocations)] action in IconButton widget.
   ApiCallResponse? locationsResult;
+  // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
+  ApiCallResponse? lFirst25Copy;
+  // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
+  ApiCallResponse? lNext25Copy;
+  // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
+  ApiCallResponse? lLast25Copy;
+  // Stores action output result for [Backend Call - API (GetCoordinates)] action in IconButton widget.
+  ApiCallResponse? coordinateResultCopy;
+  // Stores action output result for [Backend Call - API (GetNearbyLocationsId)] action in IconButton widget.
+  ApiCallResponse? locationsIdResultCopy;
+  // Stores action output result for [Backend Call - API (GetNearbyLocations)] action in IconButton widget.
+  ApiCallResponse? locationsResultCopy;
   // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
   ApiCallResponse? first25;
   // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.

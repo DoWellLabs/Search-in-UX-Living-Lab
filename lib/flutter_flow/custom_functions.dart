@@ -32,6 +32,10 @@ String formatLng(String lng) {
 }
 
 bool isListEmpty(List<dynamic> list) {
+  debugPrint("checking list : ${list}");
+  if (list.elementAt(0) == "null") {
+    return true;
+  }
   return list.isEmpty;
 }
 
@@ -132,6 +136,10 @@ int toInt(String value) {
 }
 
 int listLength(List<dynamic> list) {
+  if (list.length == Null) {
+    return 0;
+  }
+
   return list.length;
 }
 
