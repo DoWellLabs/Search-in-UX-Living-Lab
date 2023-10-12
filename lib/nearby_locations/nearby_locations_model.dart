@@ -33,14 +33,6 @@ class NearbyLocationsModel extends FlutterFlowModel<NearbyLocationsWidget> {
   // State field(s) for GoogleMap widget.
   LatLng? googleMapsCenter1;
   final googleMapsController1 = Completer<GoogleMapController>();
-  // State field(s) for sQueryDropdown widget.
-  String? sQueryDropdownValue;
-  FormFieldController<String>? sQueryDropdownValueController;
-  // State field(s) for sLocationDropdown widget.
-  String? sLocationDropdownValue;
-  FormFieldController<String>? sLocationDropdownValueController;
-  // State field(s) for sSliderRadius widget.
-  double? sSliderRadiusValue;
   // State field(s) for GoogleMap widget.
   LatLng? googleMapsCenter2;
   final googleMapsController2 = Completer<GoogleMapController>();
@@ -65,17 +57,40 @@ class NearbyLocationsModel extends FlutterFlowModel<NearbyLocationsWidget> {
   // Stores action output result for [Backend Call - API (GetNearbyLocations)] action in IconButton widget.
   ApiCallResponse? locationsResult;
   // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
-  ApiCallResponse? lFirst25Copy;
+  ApiCallResponse? iFirst25;
   // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
-  ApiCallResponse? lNext25Copy;
+  ApiCallResponse? iNext25;
   // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
-  ApiCallResponse? lLast25Copy;
+  ApiCallResponse? iLast25;
   // Stores action output result for [Backend Call - API (GetCoordinates)] action in IconButton widget.
-  ApiCallResponse? coordinateResultCopy;
+  ApiCallResponse? near;
   // Stores action output result for [Backend Call - API (GetNearbyLocationsId)] action in IconButton widget.
-  ApiCallResponse? locationsIdResultCopy;
+  ApiCallResponse? locationsIdResult;
   // Stores action output result for [Backend Call - API (GetNearbyLocations)] action in IconButton widget.
-  ApiCallResponse? locationsResultCopy;
+  ApiCallResponse? locationsResult;
+  // State field(s) for sQueryDropdown widget.
+  String? sQueryDropdownValue;
+  FormFieldController<String>? sQueryDropdownValueController;
+  // State field(s) for sLocationDropdown widget.
+  String? sLocationDropdownValue1;
+  FormFieldController<String>? sLocationDropdownValueController1;
+  // State field(s) for sLocationDropdown widget.
+  String? sLocationDropdownValue2;
+  FormFieldController<String>? sLocationDropdownValueController2;
+  // State field(s) for sSliderRadius widget.
+  double? sSliderRadiusValue;
+  // Stores action output result for [Backend Call - API (GetCoordinates)] action in IconButton widget.
+  ApiCallResponse? nearbyResult;
+  // Stores action output result for [Backend Call - API (GetNearbyLocationsId)] action in IconButton widget.
+  ApiCallResponse? nearbyLocationsIdResult;
+  // Stores action output result for [Backend Call - API (GetNearbyLocations)] action in IconButton widget.
+  ApiCallResponse? nearby;
+  // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
+  ApiCallResponse? lF25;
+  // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
+  ApiCallResponse? lN25;
+  // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
+  ApiCallResponse? lL25;
   // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
   ApiCallResponse? first25;
   // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
@@ -88,6 +103,18 @@ class NearbyLocationsModel extends FlutterFlowModel<NearbyLocationsWidget> {
   ApiCallResponse? placeIdsResult;
   // Stores action output result for [Backend Call - API (GetNearbyLocations)] action in IconButton widget.
   ApiCallResponse? nearbyLocationResult;
+  // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
+  ApiCallResponse? lFirst25Copy;
+  // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
+  ApiCallResponse? lNext25Copy;
+  // Stores action output result for [Backend Call - API (CalculateDistance)] action in IconButton widget.
+  ApiCallResponse? lLast25Copy;
+  // Stores action output result for [Backend Call - API (GetCoordinates)] action in IconButton widget.
+  ApiCallResponse? coordinateResultCopy;
+  // Stores action output result for [Backend Call - API (GetNearbyLocationsId)] action in IconButton widget.
+  ApiCallResponse? locationsIdResultCopy;
+  // Stores action output result for [Backend Call - API (GetNearbyLocations)] action in IconButton widget.
+  ApiCallResponse? locationsResultCopy;
   // Stores action output result for [Backend Call - API (CalculateDistance)] action in Row widget.
   ApiCallResponse? lEmailFirst25;
   // Stores action output result for [Backend Call - API (CalculateDistance)] action in Row widget.
