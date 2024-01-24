@@ -4,3 +4,4 @@ export 'download_csv.dart' show downloadCsv;
 export 'exit_app.dart' show exitApp;
 export 'refresh.dart' show refresh;
 export 'reset_a_p_i_results.dart' show resetAPIResults;
+export 'refine_result.dart' show refineResult;

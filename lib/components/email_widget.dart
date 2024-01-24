@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'email_model.dart';
@@ -46,6 +47,8 @@ class _EmailWidgetState extends State<EmailWidget> {
     _model = createModel(context, () => EmailModel());
 
     _model.toEmailController ??= TextEditingController();
+    _model.toEmailFocusNode ??= FocusNode();
+
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
@@ -72,7 +75,7 @@ class _EmailWidgetState extends State<EmailWidget> {
           return (MediaQuery.sizeOf(context).width * 0.35);
         }
       }(),
-      height: 290.0,
+      height: 295.0,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
@@ -82,7 +85,7 @@ class _EmailWidgetState extends State<EmailWidget> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Align(
-            alignment: AlignmentDirectional(1.00, -1.00),
+            alignment: AlignmentDirectional(1.0, -1.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -123,10 +126,10 @@ class _EmailWidgetState extends State<EmailWidget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                8.0, 8.0, 8.0, 8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: TextFormField(
                               controller: _model.toEmailController,
+                              focusNode: _model.toEmailFocusNode,
                               autofocus: true,
                               obscureText: false,
                               decoration: InputDecoration(
@@ -249,7 +252,7 @@ class _EmailWidgetState extends State<EmailWidget> {
                                   content:
                                       Text(SubscribeToNewsLetterCall.message(
                                     (_model.apiResultc4k?.jsonBody ?? ''),
-                                  ).toString()),
+                                  )!),
                                   actions: [
                                     TextButton(
                                       onPressed: () =>
@@ -268,7 +271,7 @@ class _EmailWidgetState extends State<EmailWidget> {
                                 title: Text('Email Sent Status'),
                                 content: Text(DowellSendEmailCall.message(
                                   (_model.sendEmailResult?.jsonBody ?? ''),
-                                ).toString()),
+                                )!),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
@@ -313,10 +316,6 @@ class _EmailWidgetState extends State<EmailWidget> {
                           EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          if (_model.formKey.currentState == null ||
-                              !_model.formKey.currentState!.validate()) {
-                            return;
-                          }
                           Navigator.pop(context);
                           await actions.downloadCsv(
                             widget.locations!.toList(),
@@ -358,7 +357,7 @@ class _EmailWidgetState extends State<EmailWidget> {
                                   content:
                                       Text(SubscribeToNewsLetterCall.message(
                                     (_model.apiResultc4k?.jsonBody ?? ''),
-                                  ).toString()),
+                                  )!),
                                   actions: [
                                     TextButton(
                                       onPressed: () =>
@@ -446,7 +445,7 @@ class _EmailWidgetState extends State<EmailWidget> {
                       }
                       if (isWeb) {
                         await actions.openUrl(
-                          '\"url\"',
+                          'https://checkout.stripe.com/c/pay/cs_live_a1kzZsDzM3hZvJa3qbUHSGkArXqzbQrdC3Guvz5uGOR4UvJqvFbagQraFh#fidkdWxOYHwnPyd1blppbHNgWjA0S2ZtfXBDZzM1S21VdGdvN2M3XUlBckdJaXA2XGZfV1UwZnc9UW1nS2R8RE1Vb1M9aF9WX0Y3c3ZjRl02U3JWNWIzQ2FISEpENGJDVHVGQ0FvQk1KU1Y8NTVvdmAxcmhWXycpJ3VpbGtuQH11anZgYUxhJz8nPXJINDM9Ylw8ZzFEM1BqMWJsJyknd2BjYHd3YHdKd2xibGsnPydtcXF1dj8qKmFqcmBpaXdgdmBkd2ZtK3BuKid4JSUl',
                         );
                       } else {
                         _model.paymentResults = await MakePaymentCall.call(
@@ -461,7 +460,7 @@ class _EmailWidgetState extends State<EmailWidget> {
                               'url': serializeParam(
                                 MakePaymentCall.detailsPageUrl(
                                   (_model.paymentResults?.jsonBody ?? ''),
-                                ).toString(),
+                                ),
                                 ParamType.String,
                               ),
                             }.withoutNulls,

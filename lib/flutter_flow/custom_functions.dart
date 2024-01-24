@@ -143,6 +143,15 @@ int listLength(List<dynamic> list) {
   return list.length;
 }
 
+LatLng getLatLngFromFullString(String coord) {
+  // "location_coord": "1.309046 , 36.80131600000001",
+
+  // join lat and lng strings and return a LatLng
+  List<String> coordList = coord.split(",");
+
+  return LatLng(double.parse(coordList[0]), double.parse(coordList[1]));
+}
+
 String joinCoords(List<String> coordinates) {
   return coordinates.join('|');
 }
@@ -158,13 +167,13 @@ List<String> sublist(
 }
 
 List<String>? joinLists(
-  List<String>? list1,
-  List<String>? list2,
-  List<String>? list3,
+  List<String> list1,
+  List<String> list2,
+  List<String> list3,
 ) {
   // join 3 lists to 1 with each adding to the end
 
-  return [...?list1, ...?list2, ...?list3];
+  return [...list1, ...list2, ...list3];
 }
 
 double distanceWithLocation(
@@ -206,4 +215,45 @@ LatLng latLngFromLocation(String latLng) {
   String lat = lCoord.first;
   String lng = lCoord.last;
   return LatLng(double.parse(lat), double.parse(lng));
+}
+
+String getcountry(String? apirest) {
+  if (apirest != null) {
+    return apirest;
+  } else {
+    return "singapore";
+  }
+}
+
+String? getCity(String? selectedCity) {
+  if (selectedCity != null) {
+    return selectedCity;
+  } else {
+    return "Rome";
+  }
+}
+
+String? formatDistanceinKMandMiles(double? sliderRadius) {
+  double kilometers = sliderRadius! / 1000.0;
+
+  // Convert kilometers to miles
+  double miles = kilometers * 0.621371;
+
+  // Format the result as a string
+  return "${kilometers.toStringAsFixed(1)} KM / ${miles.toStringAsFixed(2)} Miles";
+}
+
+LatLng getLatLngFromCityListJson(
+  String name,
+  List<dynamic> cityList,
+) {
+  dynamic selectedCity = cityList.firstWhere((city) => city["name"] == name);
+  if (selectedCity != null) {
+    List<String> cordinateList = selectedCity["coordinates"].split(",");
+
+    return LatLng(
+        double.parse(cordinateList[0]), double.parse(cordinateList[1]));
+  }
+
+  return LatLng(0, 0);
 }

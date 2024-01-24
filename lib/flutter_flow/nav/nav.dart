@@ -69,16 +69,21 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => SplashscreenWidget(),
             ),
             FFRoute(
-              name: 'NearbyLocations',
-              path: 'nearbyLocations',
-              builder: (context, params) => NearbyLocationsWidget(),
-            ),
-            FFRoute(
               name: 'LivingLabWebView',
               path: 'livingLabWebView',
               builder: (context, params) => LivingLabWebViewWidget(
                 url: params.getParam('url', ParamType.String),
               ),
+            ),
+            FFRoute(
+              name: 'Homepage',
+              path: 'homepage',
+              builder: (context, params) => HomepageWidget(),
+            ),
+            FFRoute(
+              name: 'HomepageNewCopy',
+              path: 'search',
+              builder: (context, params) => HomepageNewCopyWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),
@@ -209,13 +214,20 @@ class FFRoute {
                   key: state.pageKey,
                   child: child,
                   transitionDuration: transitionInfo.duration,
-                  transitionsBuilder: PageTransition(
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          PageTransition(
                     type: transitionInfo.transitionType,
                     duration: transitionInfo.duration,
                     reverseDuration: transitionInfo.duration,
                     alignment: transitionInfo.alignment,
                     child: child,
-                  ).transitionsBuilder,
+                  ).buildTransitions(
+                    context,
+                    animation,
+                    secondaryAnimation,
+                    child,
+                  ),
                 )
               : MaterialPage(key: state.pageKey, child: child);
         },

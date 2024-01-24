@@ -11,10 +11,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 Future openUrl(String url) async {
 // Use the url_launcher package to launch the URL
-  if (await canLaunchUrl(
-      Uri.parse("https://buy.stripe.com/8wMcNf4MKcp55tm6oC"))) {
-    return launchUrl(Uri.parse("https://buy.stripe.com/8wMcNf4MKcp55tm6oC"));
+  if (await canLaunchUrl(Uri.parse(url))) {
+    return launchUrl(Uri.parse(url));
   } else {
-    throw 'Could not launch https://buy.stripe.com/8wMcNf4MKcp55tm6oC';
+    throw 'Could not launch $url';
   }
 }

@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -45,9 +46,9 @@ class _SplashscreenWidgetState extends State<SplashscreenWidget>
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await Future.delayed(const Duration(milliseconds: 4000));
+      await Future.delayed(const Duration(milliseconds: 2000));
 
-      context.goNamed('NearbyLocations');
+      context.pushNamed('HomepageNewCopy');
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
@@ -62,6 +63,15 @@ class _SplashscreenWidgetState extends State<SplashscreenWidget>
 
   @override
   Widget build(BuildContext context) {
+    if (isiOS) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarBrightness: Theme.of(context).brightness,
+          systemStatusBarContrastEnforced: true,
+        ),
+      );
+    }
+
     context.watch<FFAppState>();
 
     return GestureDetector(

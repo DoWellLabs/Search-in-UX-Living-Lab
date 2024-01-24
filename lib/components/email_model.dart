@@ -7,6 +7,7 @@ import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'email_widget.dart' show EmailWidget;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,7 @@ class EmailModel extends FlutterFlowModel<EmailWidget> {
 
   final formKey = GlobalKey<FormState>();
   // State field(s) for toEmail widget.
+  FocusNode? toEmailFocusNode;
   TextEditingController? toEmailController;
   String? Function(BuildContext, String?)? toEmailControllerValidator;
   String? _toEmailControllerValidator(BuildContext context, String? val) {
@@ -56,6 +58,7 @@ class EmailModel extends FlutterFlowModel<EmailWidget> {
   }
 
   void dispose() {
+    toEmailFocusNode?.dispose();
     toEmailController?.dispose();
   }
 

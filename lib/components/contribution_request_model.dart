@@ -19,6 +19,7 @@ class ContributionRequestModel
   String? dropDownValue;
   FormFieldController<String>? dropDownValueController;
   // State field(s) for amount widget.
+  FocusNode? amountFocusNode;
   TextEditingController? amountController;
   String? Function(BuildContext, String?)? amountControllerValidator;
   String? _amountControllerValidator(BuildContext context, String? val) {
@@ -36,6 +37,7 @@ class ContributionRequestModel
   }
 
   void dispose() {
+    amountFocusNode?.dispose();
     amountController?.dispose();
   }
 

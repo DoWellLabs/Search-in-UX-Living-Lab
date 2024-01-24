@@ -45,6 +45,8 @@ class _ContributionRequestWidgetState extends State<ContributionRequestWidget> {
     _model = createModel(context, () => ContributionRequestModel());
 
     _model.amountController ??= TextEditingController();
+    _model.amountFocusNode ??= FocusNode();
+
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
@@ -200,6 +202,7 @@ class _ContributionRequestWidgetState extends State<ContributionRequestWidget> {
                     width: 170.0,
                     child: TextFormField(
                       controller: _model.amountController,
+                      focusNode: _model.amountFocusNode,
                       obscureText: false,
                       decoration: InputDecoration(
                         labelText: 'Amount',
@@ -261,7 +264,7 @@ class _ContributionRequestWidgetState extends State<ContributionRequestWidget> {
               ),
             ),
             Align(
-              alignment: AlignmentDirectional(0.00, -1.00),
+              alignment: AlignmentDirectional(0.0, -1.0),
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
                 child: Row(

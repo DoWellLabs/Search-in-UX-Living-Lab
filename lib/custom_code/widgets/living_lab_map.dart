@@ -40,54 +40,54 @@ class _LivingLabMapState extends State<LivingLabMap> {
   @override
   void initState() {
     super.initState();
-    markers = [
-      // gm.Marker(
-      //   markerId: gm.MarkerId('Center'), // A unique ID for the marker
-      //   position: gm.LatLng(widget.center.latitude,
-      //       widget.center.longitude), // The location coordinates
-      //   icon: gm.BitmapDescriptor.defaultMarker, // Marker icon (optional)
-      // ),
-      gm.Marker(
-        markerId: gm.MarkerId('Location'), // A unique ID for the marker
-        position: gm.LatLng(widget.target.latitude,
-            widget.target.longitude), // The location coordinates
-        icon: gm.BitmapDescriptor.defaultMarkerWithHue(
-            gm.BitmapDescriptor.hueBlue), // Marker icon (optional)
-      ),
-    ];
+    // markers = [
+    //   // gm.Marker(
+    //   //   markerId: gm.MarkerId('Center'), // A unique ID for the marker
+    //   //   position: gm.LatLng(widget.center.latitude,
+    //   //       widget.center.longitude), // The location coordinates
+    //   //   icon: gm.BitmapDescriptor.defaultMarker, // Marker icon (optional)
+    //   // ),
+    //   gm.Marker(
+    //     markerId: gm.MarkerId('Location'), // A unique ID for the marker
+    //     position: gm.LatLng(widget.target.latitude,
+    //         widget.target.longitude), // The location coordinates
+    //     icon: gm.BitmapDescriptor.defaultMarkerWithHue(
+    //         gm.BitmapDescriptor.hueBlue), // Marker icon (optional)
+    //   ),
+    // ];
   }
   // Add more markers as needed...
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: gm.GoogleMap(
-        onMapCreated: (controller) {
-          setState(() {
-            _mapController.complete(controller);
-          });
-        },
-        initialCameraPosition: gm.CameraPosition(
-          target: gm.LatLng(widget.target.latitude,
-              widget.target.longitude), // Set your initial map coordinates
-          zoom: 12.0, // Adjust the zoom level as needed
-        ),
-        markers: Set<gm.Marker>.of(markers),
-        circles: <gm.Circle>{
-          gm.Circle(
-            circleId:
-                gm.CircleId("geofence_circle"), // A unique ID for the circle
-            center: gm.LatLng(
-                widget.center.latitude,
-                widget.center
-                    .longitude), // Center of the circle (same as map's center)
-            radius: widget.radius, // Radius in meters (adjust as needed)
-            fillColor: Colors.blue.withOpacity(0.3), // Fill color of the circle
-            strokeColor: Colors.blue, // Stroke color of the circle
-            strokeWidth: 2, // Stroke width
-          ),
-        },
-      ),
-    );
+    return Container(child: Text("This Living lab map")
+        // gm.GoogleMap(
+        //   onMapCreated: (controller) {
+        //     setState(() {
+        //       _mapController.complete(controller);
+        //     });
+        //   },
+        //   initialCameraPosition: gm.CameraPosition(
+        //     target: gm.LatLng(widget.target.latitude,
+        //         widget.target.longitude), // Set your initial map coordinates
+        //     zoom: 12.0, // Adjust the zoom level as needed
+        //   ),
+        //  // markers: Set<gm.Marker>.of(markers),
+        //   circles: <gm.Circle>{
+        //     gm.Circle(
+        //       circleId:
+        //           gm.CircleId("geofence_circle"), // A unique ID for the circle
+        //       center: gm.LatLng(
+        //           widget.center.latitude,
+        //           widget.center
+        //               .longitude), // Center of the circle (same as map's center)
+        //       radius: widget.radius, // Radius in meters (adjust as needed)
+        //       fillColor: Colors.blue.withOpacity(0.3), // Fill color of the circle
+        //       strokeColor: Colors.blue, // Stroke color of the circle
+        //       strokeWidth: 2, // Stroke width
+        //     ),
+        //   },
+        // ),
+        );
   }
 }
